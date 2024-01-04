@@ -33,5 +33,10 @@
         public const int POid = 1470000113;
         public const string POSuccessMessage = "Se ha generado la orden de compra";
         #endregion
+
+        #region workorders
+        public const string WOAddSuccessMessage = "Se ha generado la orden de producción";
+        public const string WOGetErrorMessage = "No se encontró la orden de producción";
+        #endregion
     }
 }
