@@ -2,6 +2,7 @@
 {
     public class WorkOrder_Lines
     {
+        public int? lineNum { get; set; }
         public string itemNo { get; set; }
         public double baseQuantity { get; set; }
         public double plannedQuantity {  get; set; }

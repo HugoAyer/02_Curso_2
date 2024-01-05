@@ -37,6 +37,8 @@
         #region workorders
         public const string WOAddSuccessMessage = "Se ha generado la orden de producción";
         public const string WOGetErrorMessage = "No se encontró la orden de producción";
+        public const string WOUpdateSuccessMessage = "Se ha actualizado la orden de producción";
+        public const string WOReleaseSuccessMessage = "Se ha liberado la orden de producción";
         #endregion
     }
 }
