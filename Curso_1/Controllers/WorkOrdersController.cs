@@ -157,5 +157,41 @@ namespace Curso_1.Controllers
                 });
             }
         }
+
+        [HttpPost("Close")]
+        [Authorize]
+        public IActionResult Close(string content)
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                ConnectionParams connectionParams = IdentityContext.getCompanyParams(identity);
+                Respuesta respuesta = DataActions.ConnectionContext.connectSAP(connectionParams);
+
+                if (respuesta._code != Constants.OkCode)
+                {
+                    return Ok(respuesta);
+                }
+
+                Respuesta response = WorkOrderContext.Close(int.Parse(content));
+                if (int.Parse(response._code) < Constants.OkNum)
+                {
+                    return BadRequest(response);
+                }
+                else
+                {
+                    return Ok(response);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Respuesta
+                {
+                    _code = Constants.ErrorGenConnecting,
+                    _message = ex.Message
+                });
+            }
+        }      
     }
 }

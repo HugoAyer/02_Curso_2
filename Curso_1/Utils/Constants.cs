@@ -6,6 +6,7 @@
         public const string OkCode = "0";
         public const int OkNum = 0;
         public const string OkMessage = "";
+        public const int WOObjectID = 202;
         #endregion
 
         #region Conectar
@@ -39,6 +40,15 @@
         public const string WOGetErrorMessage = "No se encontró la orden de producción";
         public const string WOUpdateSuccessMessage = "Se ha actualizado la orden de producción";
         public const string WOReleaseSuccessMessage = "Se ha liberado la orden de producción";
+        public const string WOCloseSuccessMessage = "Se ha cerrado la orden de producción";
+        #endregion
+
+        #region productionissue
+        public const string PIAddSuccessMessage = "Se ha generado el consumo de materiales";
+        #endregion
+
+        #region productionentry
+        public const string PEAddSuccessMessage = "Se ha generado el producto terminado";
         #endregion
     }
 }

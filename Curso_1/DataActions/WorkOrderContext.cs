@@ -105,7 +105,7 @@ namespace Curso_1.DataActions
             productionOrders.PlannedQuantity = workOrder.plannedQuantity;
             productionOrders.DueDate = workOrder.dueDate;
 
-            ProductionIssueType productionIssueType = new ProductionIssueType();
+            ProductionIssueType productionIssueTypes = new ProductionIssueType();
 
             foreach (Models.WorkOrder_Lines line in workOrder.lines) 
             {
@@ -117,13 +117,13 @@ namespace Curso_1.DataActions
                     {
                         exist = true;
                         break;
-                    }                    
+                    }
                 }
                 if (exist)//Update line
                 {
                     productionOrders.Lines.BaseQuantity = line.baseQuantity;
                     productionOrders.Lines.PlannedQuantity = line.plannedQuantity;
-                    productionOrders.Lines.ProductionOrderIssueType = productionIssueType.ProductionIssues[line.issueType];
+                    productionOrders.Lines.ProductionOrderIssueType = productionIssueTypes.ProductionIssues[line.issueType];
                 }
                 else //Add Line
                 {
@@ -132,7 +132,7 @@ namespace Curso_1.DataActions
                     productionOrders.Lines.BaseQuantity = line.baseQuantity;
                     productionOrders.Lines.PlannedQuantity = line.plannedQuantity;
                     productionOrders.Lines.Warehouse = line.wareHouse;
-                    productionOrders.Lines.ProductionOrderIssueType = productionIssueType.ProductionIssues[line.issueType];
+                    productionOrders.Lines.ProductionOrderIssueType = productionIssueTypes.ProductionIssues[line.issueType];
                 }
             }
 
@@ -200,6 +200,49 @@ namespace Curso_1.DataActions
             }
         }
         #endregion
+        #region close
+        public static Respuesta Close(int docEntry)
+        {
+            SAPbobsCOM.ProductionOrders productionOrders;
+
+            bool success = Find(docEntry, out productionOrders);
+            if (success)
+            {
+                return Close(ref productionOrders);
+            }
+            else
+            {
+                return new Respuesta
+                {
+                    _code = Constants.ErrorGenConnecting,
+                    _message = Constants.WOGetErrorMessage
+                };
+            }
+        }
+        private static Respuesta Close(ref SAPbobsCOM.ProductionOrders productionOrders)
+        {
+            productionOrders.ProductionOrderStatus = BoProductionOrderStatusEnum.boposClosed;
+            int code = productionOrders.Update();
+            if (code != Constants.OkNum)
+            {
+                string message = "";
+                SAPCompany.company.GetLastError(out code, out message);
+                return new Respuesta
+                {
+                    _code = code.ToString(),
+                    _message = message
+                };
+            }
+            else
+            {
+                return new Respuesta
+                {
+                    _code = Constants.OkCode,
+                    _message = Constants.WOCloseSuccessMessage
+                };
+            }
+        }
+        #endregion
         #region common
         public static bool Find(int docEntry,out SAPbobsCOM.ProductionOrders productionOrder)
         {
@@ -246,7 +289,6 @@ namespace Curso_1.DataActions
             workOrder.lines = lines.ToArray();            
             return workOrder;
         }
-        #endregion
-
+        #endregion        
     }
 }
